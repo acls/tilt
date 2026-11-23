@@ -37,6 +37,13 @@ $font-size-icon: 24px;
   --color-yellow: #fcb41e;
   --color-yellow-light: #fdcf6f;
 
+  // Text on a solid brand-color fill (e.g. confirm buttons). Not inverted
+  // by the light theme, since brand fills stay saturated in both themes.
+  --color-on-accent: #ffffff;
+
+  // ANSI "bright cyan" in logs. The other ANSI colors reuse the brand colors.
+  --color-ansi-bright-cyan: #55ffff;
+
   // RGB variants for use with rgba()
   --color-white-rgb: 255, 255, 255;
   --color-black-rgb: 0, 0, 0;
@@ -59,7 +66,10 @@ $font-size-icon: 24px;
   --color-black: #ffffff;
   --color-gray-70: #2D4D55;
   --color-gray-60: #586e75;
-  --color-gray-50: #93a1a1;
+  // Muted icons/borders (e.g. unselected nav icons). Matches the dark theme's
+  // gray-50 contrast against its header (3.3:1) so "dim" reads the same in
+  // both themes, while staying clearly dimmer than selected (gray-70) icons.
+  --color-gray-50: #829090;
   --color-gray-40: #CCDADE;
   --color-gray-30: #dde4e4;
   --color-gray-20: #f8fafa;
@@ -67,32 +77,39 @@ $font-size-icon: 24px;
   --color-gray-darker: #eef1f1;
   --color-gray-lightest: #586e75;
 
-  // Brand Colors — adjusted for light backgrounds
-  --color-green: #1a9928;
-  --color-green-light: #4db858;
-  --color-blue: #0298a3;
-  --color-blue-light: #03c7d3;
+  // Brand Colors — adjusted for light backgrounds.
+  // Derived from the dark-theme brand colors by keeping each OKLCH hue and
+  // lowering lightness until it meets a WCAG contrast target against the
+  // gray-20 page background (#f8fafa):
+  //   base colors: ≥4.5:1 (text), which also keeps them ≥3:1 on gray-30 panels
+  //   "-light" variants: ≥6:1. They are hover/pulse states, so in the light
+  //   theme they get darker (more emphasis), not lighter.
+  --color-green: #018418;
+  --color-green-light: #006d12;
+  --color-blue: #0a7e86;
+  --color-blue-light: #00686f;
   --color-blue-dark: #006b70;
   --color-purple: #4f63a3;
-  --color-red: #e5564a;
-  --color-red-light: #f7aaa4;
-  --color-pink: #d94d8c;
-  --color-yellow: #e09c10;
-  --color-yellow-light: #fcb41e;
+  --color-red: #cb4038;
+  --color-red-light: #b32724;
+  --color-pink: #ca3681;
+  --color-yellow: #976904;
+  --color-yellow-light: #7d5601;
+  --color-ansi-bright-cyan: #088283; // #55ffff darkened the same way, 4.6:1 on white
 
   // RGB variants for light theme
   --color-white-rgb: 0, 43, 54;
   --color-black-rgb: 255, 255, 255;
   --color-gray-60-rgb: 88, 110, 117;
-  --color-gray-50-rgb: 147, 161, 161;
+  --color-gray-50-rgb: 130, 144, 144;
   --color-gray-30-rgb: 221, 228, 228;
   --color-gray-20-rgb: 248, 250, 250;
   --color-gray-10-rgb: 255, 255, 255;
   --color-gray-lightest-rgb: 88, 110, 117;
-  --color-blue-rgb: 2, 152, 163;
-  --color-green-rgb: 26, 153, 40;
-  --color-red-rgb: 229, 86, 74;
-  --color-yellow-rgb: 224, 156, 16;
+  --color-blue-rgb: 10, 126, 134;
+  --color-green-rgb: 1, 132, 24;
+  --color-red-rgb: 203, 64, 56;
+  --color-yellow-rgb: 151, 105, 4;
 }
 
 // SCSS convenience variables referencing CSS vars

@@ -5,6 +5,7 @@ import { ReactComponent as StartBuildButtonManualSvg } from "./assets/svg/start-
 import { ReactComponent as StartBuildButtonSvg } from "./assets/svg/start-build-button.svg"
 import { ReactComponent as StopBuildButtonSvg } from "./assets/svg/stop-build-button.svg"
 import { InstrumentedButton } from "./instrumentedComponents"
+import { Color } from "./style-helpers"
 import TiltTooltip from "./Tooltip"
 import { BuildButtonTooltip, buildButtonTooltip } from "./trigger"
 import { TriggerMode, UIButton } from "./types"
@@ -56,6 +57,17 @@ function BuildButton(props: BuildButtonProps) {
     )
   }
 }
+
+// The emphasized "start build" icon: a filled circle with a dark arrow. Colors
+// come from theme variables so the circle keeps contrast in the light theme.
+const ManualBuildIcon = styled(StartBuildButtonManualSvg)`
+  .manualCircle {
+    fill: ${Color.blueLight};
+  }
+  .manualArrow {
+    fill: ${Color.gray30};
+  }
+`
 
 // A wrapper to receive pointer events so that we get cursor and tooltip when disabled
 // https://mui.com/components/tooltips/#disabled-elements
@@ -142,7 +154,7 @@ function StartBuildButton(props: StartBuildButtonProps) {
           aria-label={tooltip}
         >
           {isEmphasized ? (
-            <StartBuildButtonManualSvg
+            <ManualBuildIcon
               role="presentation"
               className="icon"
               data-testid="build-manual-icon"

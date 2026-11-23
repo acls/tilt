@@ -13,6 +13,7 @@ export enum Color {
   yellowLight = "var(--color-yellow-light)",
   purple = "var(--color-purple)",
   white = "var(--color-white)",
+  onAccent = "var(--color-on-accent)", // text on solid brand-color fills
 
   offWhite = "var(--color-off-white)",
   gray70 = "var(--color-gray-70)",

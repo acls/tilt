@@ -3,28 +3,39 @@
 // This file was originally written by @drudru (https://github.com/drudru/ansi_up), MIT, 2011
 // Forked from https://github.com/IonicaBizau/anser/blob/ac20b53394a933ac9a2364159f49dd6903f08682/lib/index.js for Tilt Dev.
 
+// Tilt: the 16 system colors use the UI's theme variables (see constants.scss)
+// so log colors follow the light/dark theme, including lines already rendered.
+// The dark-theme values match the original hex values. Black stays fixed so
+// that black text remains readable on the light theme's white log background.
 const ANSI_COLORS = [
     [
-        { color: "0, 0, 0",        "class": "ansi-black"   }
-      , { color: "#f6685c",      "class": "ansi-red"     }
-      , { color: "#20ba31",      "class": "ansi-green"   }
-      , { color: "#fcb41e",    "class": "ansi-yellow"  }
-      , { color: "#03c7d3",      "class": "ansi-blue"    }
-      , { color: "#6378ba",    "class": "ansi-magenta" }
-      , { color: "#5edbe3",    "class": "ansi-cyan"    }
-      , { color: "255,255,255",    "class": "ansi-white"   }
+        { color: "0, 0, 0",                         "class": "ansi-black"   }
+      , { color: "var(--color-red)",                "class": "ansi-red"     }
+      , { color: "var(--color-green)",              "class": "ansi-green"   }
+      , { color: "var(--color-yellow)",             "class": "ansi-yellow"  }
+      , { color: "var(--color-blue)",               "class": "ansi-blue"    }
+      , { color: "var(--color-purple)",             "class": "ansi-magenta" }
+      , { color: "var(--color-blue-light)",         "class": "ansi-cyan"    }
+      , { color: "var(--color-white)",              "class": "ansi-white"   }
     ]
   , [
-        { color: "#586e75",     "class": "ansi-bright-black"   }
-      , { color: "#f7aaa4",    "class": "ansi-bright-red"     }
-      , { color: "#70d37b",      "class": "ansi-bright-green"   }
-      , { color: "#fdcf6f",   "class": "ansi-bright-yellow"  }
-      , { color: "#5edbe3",    "class": "ansi-bright-blue"    }
-      , { color: "#6378ba",   "class": "ansi-bright-magenta" }
-      , { color: "85, 255, 255",   "class": "ansi-bright-cyan"    }
-      , { color: "255, 255, 255",  "class": "ansi-bright-white"   }
+        { color: "var(--color-gray-50)",            "class": "ansi-bright-black"   }
+      , { color: "var(--color-red-light)",          "class": "ansi-bright-red"     }
+      , { color: "var(--color-green-light)",        "class": "ansi-bright-green"   }
+      , { color: "var(--color-yellow-light)",       "class": "ansi-bright-yellow"  }
+      , { color: "var(--color-blue-light)",         "class": "ansi-bright-blue"    }
+      , { color: "var(--color-purple)",             "class": "ansi-bright-magenta" }
+      , { color: "var(--color-ansi-bright-cyan)",   "class": "ansi-bright-cyan"    }
+      , { color: "var(--color-white)",              "class": "ansi-bright-white"   }
     ]
 ];
+
+// Palette entries are "r, g, b" triples, "#rrggbb" or "var(--name)".
+const cssColor = (c) => (c[0] === "#" || c.startsWith("var(")) ? c : "rgb(" + c + ")";
+
+// Tilt: when "reverse" has no explicit background, the swapped-in text color
+// is the log pane's background color, not ANSI black.
+const DEFAULT_BG = "var(--color-gray-10)";
 
 class Anser {
 
@@ -527,7 +538,7 @@ class Anser {
                       jsonChunk.fg = ANSI_COLORS[0][7][use_classes ? "class" : "color"];
                     }
                     if (!jsonChunk.bg) {
-                      jsonChunk.bg = ANSI_COLORS[0][0][use_classes ? "class" : "color"];
+                      jsonChunk.bg = use_classes ? ANSI_COLORS[0][0]["class"] : DEFAULT_BG;
                     }
                     let tmpFg = jsonChunk.fg;
                     jsonChunk.fg = jsonChunk.bg;
@@ -572,10 +583,8 @@ class Anser {
                     data["ansi-truecolor-fg"] = jsonChunk.fg_truecolor;
                     jsonChunk.fg_truecolor = null;
                 }
-            } else if (jsonChunk.fg[0] == '#') {
-                colors.push("color:" + jsonChunk.fg + ";");
             } else {
-                colors.push("color:rgb(" + jsonChunk.fg + ")");
+                colors.push("color:" + cssColor(jsonChunk.fg));
             }
         }
 
@@ -586,10 +595,8 @@ class Anser {
                     data["ansi-truecolor-bg"] = jsonChunk.bg_truecolor;
                     jsonChunk.bg_truecolor = null;
                 }
-            } else if (jsonChunk.bg[0] == '#') {
-                colors.push("background-color:" + jsonChunk.bg + ";");
             } else {
-              colors.push("background-color:rgb(" + jsonChunk.bg + ")");
+                colors.push("background-color:" + cssColor(jsonChunk.bg));
             }
         }
 
